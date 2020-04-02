@@ -6,7 +6,7 @@
 
 #define NUMBER_OF_STRINGS 100
 #define MAX_STRING_SIZE 200
-#define EMPTY_SIZE 81
+#define EMPTY_SIZE 76
 
 struct file_{
   char** contents;
@@ -16,6 +16,7 @@ struct file_{
 
 void read_contents(struct file_* f);
 bool compare_contents(struct file_* a, struct file_* b);
+void print_contents(FILE* stream, struct file_* f);
 
 struct file_* file_constructor(const char* file_path){
   struct file_ *f =  (struct file_*)malloc(sizeof(struct file_));
@@ -39,16 +40,24 @@ void file_destructor(struct file_* f){
   free(f);
 }
 
-bool __eq__(struct file_* a, struct file_* b){
+bool is_eq(struct file_* a, struct file_* b){
   bool fn = (strcmp(a->file_path, b->file_path) == 0);  
   bool len = (a->length == b->length);
   bool contents = compare_contents(a, b);
   return (fn && len && contents);
 }
 
-bool __neq__(struct file_*a, struct file_* b){
-  return !__eq__(a, b);
+bool is_neq(struct file_*a, struct file_* b){ return !is_eq(a, b); }
+
+void repr(struct file_* f){
+  printf("Path: %s\n", f->file_path);
+  printf("File length: %d\n", f->length);
+  printf("Contents of file: \n");
+  print_contents(stdout, f);
 }
+
+
+// member functions
 
 void read_contents(struct file_* f){
   char *line;
@@ -75,14 +84,8 @@ void read_contents(struct file_* f){
 
 void print_contents(FILE* stream, struct file_* f){
   for(int i = 0; i < f->length; ++i){
-    fprintf(stream, "[%d]: %s", i, f->contents[i]);
+    fprintf(stream, "[%d]: %s\n", i, f->contents[i]);
   }
-}
-
-void slice(const char* input, char* buffer, int n, int k){
-  int j = 0;
-  for(int i = n; i <=k; ++i){ buffer[j++] = input[i++]; }
-  buffer[j] = '\0';
 }
 
 void print_contents_side_by_side(FILE* stream, struct file_* a, struct file_* b){
@@ -93,14 +96,10 @@ void print_contents_side_by_side(FILE* stream, struct file_* a, struct file_* b)
   padding[EMPTY_SIZE-1] = '\0';
   for(int i = 0; i < longest_side_; ++i){
     char leftside[BUFSIZ], rightside[BUFSIZ], nonvoid_line[BUFSIZ];
-    sprintf(nonvoid_line, "%-75s", (i < shortest_side_) ? a->contents[i] : "(null)");
-    if(i < shortest_side_){
-      sprintf(leftside, "%s", nonvoid_line);
-    } else{
-      sprintf(leftside, "%.*s", EMPTY_SIZE-6, padding);
-    }
+    sprintf(nonvoid_line, "%-75s", (i < shortest_side_) ? a->contents[i] : "");
+    sprintf(leftside, "%s", (i < shortest_side_) ? nonvoid_line : padding);
     sprintf(rightside, "%s\n", b->contents[i]);
-    fprintf(stream, "%s%s", leftside, rightside);
+    fprintf(stream, "%s %s", leftside, rightside);
   }
 }
 
