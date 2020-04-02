@@ -1,5 +1,5 @@
-#include "file_struct.h"
-#include <string.h>
+#include <stdio.h>
+#include "includes/file_struct.h"
 
 int main(int argc, const char* argv[]){
   struct file_* f_a = file_constructor("inputs/left.txt");
