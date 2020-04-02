@@ -97,10 +97,11 @@ void print_contents_side_by_side(FILE* stream, struct file_* a, struct file_* b)
     if(i < shortest_side_){
       sprintf(leftside, "%s", nonvoid_line);
     } else{
-      sprintf(leftside, "%.*s", EMPTY_SIZE-6, padding);
+      sprintf(leftside, "%.*s%s", EMPTY_SIZE-5, padding, b->contents[i]);
     }
-    sprintf(rightside, "%s\n", b->contents[i]);
-    fprintf(stream, "%s%s", leftside, rightside);
+    sprintf(nonvoid_line, "%s", b->contents[i]);
+    //sprintf(rightside, "%s", nonvoid_line);
+    fprintf(stream, "%s %s\n", leftside, rightside);
   }
 }
 
