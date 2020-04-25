@@ -44,7 +44,7 @@ void repr(struct file_* f){
   printf("Path: %s\n", f->file_path);
   printf("File length: %d\n", f->length);
   printf("Contents of file: \n");
-  print_contents(stdout, f);
+  print_contents(stdout, f, false);
 }
 
 
@@ -66,18 +66,29 @@ void read_contents(struct file_* f){
 
   while ((read = getline(&line, &len, file_in)) != EOF) {
     char* pos;
-    if((pos = strchr(line, '\n')) != NULL){ *pos = '\0'; }
+    /*if((pos = strchr(line, '\n')) != NULL){ *pos = '\0'; }*/
     sprintf(f->contents[line_number_], "%s", line);
     line_number_++;
   }
   f->length = line_number_;
 }
 
-void print_contents(FILE* stream, struct file_* f){
+void print_contents(FILE* stream, struct file_* f, bool numbered){
+  char buffer[BUFSIZ];
   for(int i = 0; i < f->length; ++i){
-    fprintf(stream, "[%d]: %s\n", i, f->contents[i]);
+    sprintf(buffer, "[%d]: ", i);
+    fprintf(stream, "%s%s", (numbered) ? buffer : "", f->contents[i]);
   }
 }
+
+void print_contents_numbered(FILE* stream, struct file_* f){
+  print_contents(stream, f, true);
+}
+
+void print_contents_normal(FILE* stream, struct file_* f){
+  print_contents(stream, f, false);
+}
+
 
 void print_contents_side_by_side(FILE* stream, struct file_* a, struct file_* b){
   int longest_side_ = (a->length < b->length) ? b->length : a->length;
