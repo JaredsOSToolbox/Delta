@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include "../includes/file_struct.h"
 
-#define NUMBER_OF_STRINGS 100
-#define MAX_STRING_SIZE 200
+#define NUMBER_OF_STRINGS 1000
+#define MAX_STRING_SIZE 1000
 #define PADDING_SIZE 76
 
 struct file_* file_constructor(const char* file_path){
@@ -15,9 +15,6 @@ struct file_* file_constructor(const char* file_path){
   f->contents = malloc(NUMBER_OF_STRINGS * sizeof(char*));
   f->file_path = malloc(sizeof(char*));
   sprintf(f->file_path, "%s", file_path);
-  for (int i = 0; i < NUMBER_OF_STRINGS; i++){
-      f->contents[i] = malloc((MAX_STRING_SIZE+1) * sizeof(char));
-  }
   read_contents(f);
   return f;
 }
@@ -66,7 +63,8 @@ void read_contents(struct file_* f){
 
   while ((read = getline(&line, &len, file_in)) != EOF) {
     char* pos;
-    /*if((pos = strchr(line, '\n')) != NULL){ *pos = '\0'; }*/
+    if((pos = strchr(line, '\n')) != NULL){ *pos = '\0'; }
+    f->contents[line_number_] = malloc((MAX_STRING_SIZE+1) * sizeof(char));
     sprintf(f->contents[line_number_], "%s", line);
     line_number_++;
   }
