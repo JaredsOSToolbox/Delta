@@ -11,7 +11,6 @@
 
 struct file_* file_constructor(const char* file_path){
   struct file_ *f =  (struct file_*)malloc(sizeof(struct file_));
-  f->length = 0;
   f->contents = malloc(NUMBER_OF_STRINGS * sizeof(char*));
   f->file_path = malloc(sizeof(char*));
   sprintf(f->file_path, "%s", file_path);

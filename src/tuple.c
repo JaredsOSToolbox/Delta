@@ -40,4 +40,3 @@ void tuple_repr(tuple* t){
   slist_print(t->bucket, "tuple_repr");
   printf("\n");
 }
-

@@ -51,17 +51,19 @@ void test_tuples(){
   printf("%d\n", a.base.t.x);
   printf("%s\n", a.base.t.name);
   slist_pushback(a.base.t.bucket, "Hello");
+  printf("value of hash: %d\n", tuple_hash(a));
   slist_print(a.base.t.bucket, "test insertion");
 }
 
 int main(int argc, const char* argv[]){
-  struct file_* a = file_constructor("inputs/left.txt");
-  struct file_* b = file_constructor("inputs/right.txt");
+  test_tuples();
+  /*struct file_* a = file_constructor("inputs/left.txt");*/
+  /*struct file_* b = file_constructor("inputs/right.txt");*/
   /*meyers_diff(a, b);*/
   /*tuple_repr(&k->t);*/
   /*tuple_destructor(4, keep, insert, remove, frontier);*/
-  file_destructor(a);
-  file_destructor(b);
+  /*file_destructor(a);*/
+  /*file_destructor(b);*/
   return 0;
 
 }

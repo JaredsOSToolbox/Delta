@@ -7,29 +7,31 @@ typedef struct tuple{
   int x, y;
   const char* name;
   slist* bucket;
+  bool keep, remove, insert;
 } tuple;
 
-typedef struct keep_tuple{
-  union{
-    struct tuple t;
-  } base;
-} keep_tuple; 
+//typedef struct keep_tuple{
+  //union{
+    //struct tuple t;
+  //} base;
+//} keep_tuple; 
 
-typedef struct remove_tuple{
-  union{
-    struct tuple t;
-  } base;
-} remove_tuple; 
+//typedef struct remove_tuple{
+  //union{
+    //struct tuple t;
+  //} base;
+//} remove_tuple; 
 
-typedef struct insert_tuple{
-  union{
-    struct tuple t;
-  } base;
-} insert_tuple;
+//typedef struct insert_tuple{
+  //union{
+    //struct tuple t;
+  //} base;
+//} insert_tuple;
 
 typedef struct frontier_tuple{
   union{
     struct tuple t;
+    int* coordinates;
   } base;
 } frontier_tuple;
 
