@@ -87,40 +87,6 @@ void print_contents_normal(FILE* stream, struct file_* f){
 }
 
 
-void print_contents_side_by_side(FILE* stream, struct file_* a, struct file_* b){
-  int longest_side_ = (a->length < b->length) ? b->length : a->length;
-  int shortest_side_ = (a->length < b->length) ? a->length : b->length;
-  char padding[PADDING_SIZE];
-  memset(padding, ' ', PADDING_SIZE-1);
-  padding[PADDING_SIZE-1] = '\0';
-  for(int i = 0; i < longest_side_; ++i){
-    char leftside[BUFSIZ], rightside[BUFSIZ], nonvoid_line[BUFSIZ];
-    sprintf(nonvoid_line, "%-75s", (i < shortest_side_) ? a->contents[i] : "");
-    sprintf(leftside, "%s", (i < shortest_side_) ? nonvoid_line : padding);
-    sprintf(rightside, "%s\n", b->contents[i]);
-    fprintf(stream, "%s %s", leftside, rightside);
-  }
-}
-
-void print_contents_side_by_side_mod(FILE* stream, struct file_* a, struct file_* b){
-  int longest_side_ = (a->length < b->length) ? b->length : a->length;
-  int shortest_side_ = (a->length < b->length) ? a->length : b->length;
-  int begin_shortest_index = 5,  j = 0;
-  printf("%d\n", begin_shortest_index);
-  char padding[PADDING_SIZE];
-  memset(padding, ' ', PADDING_SIZE-1);
-  padding[PADDING_SIZE-1] = '\0';
-  for(int i = 0; i < longest_side_+begin_shortest_index; ++i){
-    char leftside[BUFSIZ], rightside[BUFSIZ], nonvoid_line[BUFSIZ];
-    sprintf(nonvoid_line, "%-75s", (i > begin_shortest_index) ? a->contents[j++] : padding);
-
-    sprintf(leftside, "%s", nonvoid_line);
-    sprintf(rightside, "%s\n", b->contents[i]);
-    fprintf(stream, "%s %s", leftside, rightside);
-  }
-}
-
-
 bool compare_contents(struct file_* a, struct file_* b){
   if(a->length != b->length){ return false; }
   for(int i = 0; i < a->length; ++i){
