@@ -1,3 +1,3 @@
 all:
-	clang src/*.c main.c -o main
-	./main
+	clang src/*.c delta.c -o delta
+	./delta
