@@ -1,9 +1,12 @@
 #pragma once
 #include <stdbool.h>
+#include "paragraph.h"
 struct file_{
   char** contents;
   char* file_path;
   int length;
+  paragraph_network* para_network;
+  //paragraph** para_map;
 };
 
 struct file_* file_constructor(const char*);

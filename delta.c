@@ -53,18 +53,23 @@ int main(int argc, const char* argv[]){
   struct file_* a = file_constructor("inputs/left.txt");
   struct file_* b = file_constructor("inputs/right.txt");
 
-  if(version){
-    print_version();
-  } else if(brief || report_identical){
-    if(!compare_contents(a, b)){
-      printf("Files %s and %s differ\n", a->file_path, b->file_path);
-    }
-    else{
-      printf("Files %s and %s are identical\n", a->file_path, b->file_path);
-    }
-  } else if(normal){
-    printf("this is normal diff!\n");
+  printf("amount of paragraphs in a is: %zu\n", a->para_network->size);
+  for(int i = 0; i < a->para_network->size; ++i){
+    paragraph_print(stdout, a->para_network->paragraph_nodes[i]);
   }
+
+  /*if(version){*/
+    /*print_version();*/
+  /*} else if(brief || report_identical){*/
+    /*if(!compare_contents(a, b)){*/
+      /*printf("Files %s and %s differ\n", a->file_path, b->file_path);*/
+    /*}*/
+    /*else{*/
+      /*printf("Files %s and %s are identical\n", a->file_path, b->file_path);*/
+    /*}*/
+  /*} else if(normal){*/
+    /*printf("this is normal diff!\n");*/
+  /*}*/
   file_destructor(a);
   file_destructor(b);
   return 0;
