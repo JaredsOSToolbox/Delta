@@ -52,7 +52,7 @@ int main(int argc, const char* argv[]){
   read_all_args(--argc, ++argv);
   struct file_* a = file_constructor("inputs/left.txt");
   struct file_* b = file_constructor("inputs/right.txt");
-
+  slice(a);
   printf("amount of paragraphs in a is: %zu\n", a->para_network->size);
   for(int i = 0; i < a->para_network->size; ++i){
     paragraph_print(stdout, a->para_network->paragraph_nodes[i]);

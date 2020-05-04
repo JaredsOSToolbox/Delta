@@ -65,18 +65,9 @@ void read_contents(struct file_* f){
   }
   
   while ((read = getline(&line, &len, file_in)) != EOF) {
-    char* pos;
-    if((pos = strchr(line, '\n')) != NULL){ 
-      if(strlen(line) == 1){
-        paragraph_network_add_paragraph(f->para_network, paragraph_constructor(f->contents, paragraph_start, paragraph_end));
-        paragraph_start = paragraph_end = line_number_+2;
-      }
-      *pos = '\0'; 
-    }
     f->contents[line_number_] = malloc((strlen(line)+1) * sizeof(char));
     sprintf(f->contents[line_number_], "%s", line);
     line_number_++;
-    paragraph_end++;
   }
   f->length = line_number_;
 }
