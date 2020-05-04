@@ -7,6 +7,7 @@
 #include "includes/delta.h"
 
 const char* AUTHOR = "Jared Dyreson";
+const char* COAUTHOR = "William McCarthy";
 const char* INSTITUTION = "California State University Fullerton";
 
 void print_version(){
@@ -16,8 +17,8 @@ void print_version(){
     "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>."
     "This is free software: you are free to change and redistribute it.\n"
     "There is NO WARRANTY, to the extent permitted by law.\n"
-    "Written by %s\n",
-  INSTITUTION, AUTHOR); 
+    "Written by %s and %s\n",
+  INSTITUTION, AUTHOR, COAUTHOR); 
 }
 
 void set_flags(const char* cli_arg, const char* flag, const char* long_flag, bool* value){
