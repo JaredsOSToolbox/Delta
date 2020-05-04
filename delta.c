@@ -51,13 +51,17 @@ void read_all_args(int argc, const char* argv[]){
 
 int main(int argc, const char* argv[]){
   read_all_args(--argc, ++argv);
-  struct file_* a = file_constructor("inputs/left.txt");
-  struct file_* b = file_constructor("inputs/right.txt");
+  struct file_* a = file_constructor("inputs/test");
+  struct file_* b = file_constructor("inputs/test_two");
   slice(a);
-  printf("amount of paragraphs in a is: %zu\n", a->para_network->size);
-  for(int i = 0; i < a->para_network->size; ++i){
-    paragraph_print(stdout, a->para_network->paragraph_nodes[i]);
-  }
+  char* message = (char*)malloc(BUFSIZ*2*sizeof(char));
+  memset(message, 0, strlen(message));
+  bool are_same = compare_contents(a, b, message);
+  printf("%s", message);
+  /*printf("amount of paragraphs in a is: %zu\n", a->para_network->size);*/
+  /*for(int i = 0; i < a->para_network->size; ++i){*/
+    /*paragraph_print(stdout, a->para_network->paragraph_nodes[i]);*/
+  /*}*/
 
   /*if(version){*/
     /*print_version();*/

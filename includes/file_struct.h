@@ -20,6 +20,6 @@ void print_contents_side_by_side(FILE* stream, struct file_* a, struct file_* b)
 void read_contents(struct file_*);
 
 void repr(struct file_*);
-bool compare_contents(struct file_*, struct file_*);
+bool compare_contents(struct file_*, struct file_*, char*);
 bool is_eq(struct file_*, struct file_*);
 bool is_neq(struct file_*, struct file_*);
