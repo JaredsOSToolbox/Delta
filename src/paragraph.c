@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "../includes/paragraph.h"
 #include "../includes/file_struct.h"
+#include "../includes/printer.h"
 
 #define NUMBER_OF_PARAGRAPHS 100
 
@@ -47,8 +48,17 @@ void paragraph_network_add_paragraph(paragraph_network* network, paragraph* para
 }
 
 void paragraph_print(paragraph* para, void (*fp)(const char*)){
+  printf("calling %s\n", __func__);
   for(int i = para->begin; i < para->end; ++i){
+    printf("sending: %s\n", para->master_content[i]);
     fp(para->master_content[i]);
+  }
+  printf("\n");
+}
+
+void paragraph_vanilla_print(paragraph* p){
+  for(int i = p->begin; i < p->end; ++i){
+    printf("%s", p->master_content[i]);
   }
   printf("\n");
 }
@@ -57,18 +67,44 @@ bool paragraph_equal(paragraph* p, paragraph* q){
   if(paragraph_size(p) != paragraph_size(q)){ return false; }
   int i = p->begin, j = q->begin;
   for(i, j; i < p->end || j < q->end; ++i, ++j){
-    if(i >= p->end){ return false; }
-    else if(strcmp(p->master_content[i], q->master_content[j]) != 0){ return false; }
+    if(strcmp(p->master_content[i], q->master_content[j]) != 0 || (i >= p->end)){ 
+      return false; 
+    }
   }
   return true;
 }
 
-bool paragraph_network_equal(paragraph_network* p, paragraph_network* q){
+bool paragraph_network_equal(paragraph_network* p, paragraph_network* q, int* qlast_index){
   if(p->size != q->size){ return false; }
   for(int i = 0, j = 0; i < p->size && j < q->size; ++i, ++j){
-    if(!paragraph_equal(p->paragraph_nodes[i], q->paragraph_nodes[j])){ return false; }
+    if(!paragraph_equal(p->paragraph_nodes[i], q->paragraph_nodes[j])){ 
+      *qlast_index = j;
+      return false; 
+    }
   }
   return true;
+}
+
+void print_paragraph_networks(paragraph_network* p, paragraph_network* q, int qlast_index){
+  bool switch_flag = false; 
+  int i = 0, j = 0;
+  for(i, j; i < p->size && j < q->size ; ++i, ++j){
+    if(!paragraph_equal(p->paragraph_nodes[i], q->paragraph_nodes[j])){ 
+      switch_flag = true;
+      break; 
+      printf("breaking\n");
+    }
+    else{
+      printf("print_right\n");
+    }
+  }
+  if(switch_flag){
+    printf("print_both\n");
+    printf("i: %d\nj: %d\n", i, j);
+  }
+  for(i, j; i <= p->size && j <= q->size; ++i, ++j){
+    printf("print right?\n");
+  }
 }
 
 paragraph* para_next(struct file_* a, paragraph* p) {

@@ -6,15 +6,13 @@
 #include <math.h>
 #include "../includes/file_struct.h"
 #include "../includes/paragraph.h"
+#include "../includes/printer.h"
 
 #define NUMBER_OF_STRINGS 1000
 #define MAX_STRING_SIZE 1000
 #define PADDING_SIZE 76
 #define NUMBER_OF_PARAGRAPHS 500
 
-#define ANSI_COLOR_RESET "\x1b[0m"
-#define ANSI_COLOR_RED "\x1b[31m"
-#define ANSI_COLOR_GREEN "\x1b[32m"
 
 struct file_* file_constructor(const char* file_path){
   struct file_ *f =  (struct file_*)malloc(sizeof(struct file_));

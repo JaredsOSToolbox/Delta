@@ -65,17 +65,40 @@ void read_all_args(int argc, const char* argv[]){
 
 int main(int argc, const char* argv[]){
   read_all_args(--argc, ++argv);
-  struct file_* a = file_constructor("inputs/right.txt");
-  struct file_* b = file_constructor("inputs/left.txt");
+  if(version){
+    print_version();
+    return 0;
+  }
+
+  struct file_* a = file_constructor("inputs/test");
+  struct file_* b = file_constructor("inputs/test_two");
 
   slice(a);
   slice(b);
 
-  bool match = paragraph_network_equal(a->para_network, b->para_network);
+  int qlast_index = -1;
+  paragraph* qlast;
+  bool match = paragraph_network_equal(a->para_network, b->para_network, &qlast_index);
+  if(qlast_index != EOF){ qlast = b->para_network->paragraph_nodes[qlast_index]; }
   if(match){
-    printf("they are the same!\n");
+    if(brief || report_identical){
+      printf("%sFiles %s and %s are identical%s\n",
+              ANSI_COLOR_GREEN, a->file_path, b->file_path, ANSI_COLOR_RESET);
+      return 0;
+    }
   } else{
-    printf("not the same!\n");
+    if(brief){
+      printf("%sFiles %s and %s differ%s\n",
+              ANSI_COLOR_RED, a->file_path, b->file_path, ANSI_COLOR_RESET);
+      return 0;
+    }
+    else{
+      printf("here is where normal mode comes in\n");
+      print_paragraph_networks(a->para_network, b->para_network, qlast_index);
+      // iterate over the collection
+      // while there is a match, print right
+      // once this condition is false, we need to stop iterating and  
+    }
   }
 
   /*if(match){*/
