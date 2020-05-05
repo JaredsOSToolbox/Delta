@@ -7,6 +7,8 @@
 
 #define NUMBER_OF_PARAGRAPHS 100
 
+int my_max(int a, int b){ return (a > b) ? a : b; }
+
 paragraph* paragraph_constructor(char** content, int begin, int end){
   paragraph* para = (paragraph*)malloc(sizeof(paragraph));
   para->master_content = content;
@@ -28,6 +30,8 @@ void paragraph_destructor(paragraph* para){
   free(para);
 }
 
+int paragraph_size(paragraph* p){ return (p->end - p->begin)+2; }
+
 void paragraph_network_destructor(paragraph_network* network){
   for(int i = 0; i < network->size; ++i){
     paragraph_destructor(network->paragraph_nodes[i]);
@@ -42,18 +46,28 @@ void paragraph_network_add_paragraph(paragraph_network* network, paragraph* para
   network->paragraph_nodes[network->size++] = para;
 }
 
-void paragraph_print(FILE* output,  paragraph* para){
+void paragraph_print(paragraph* para, void (*fp)(const char*)){
   for(int i = para->begin; i < para->end; ++i){
-    fprintf(output, "%s", para->master_content[i]);
+    fp(para->master_content[i]);
   }
-  fprintf(output, "\n");
+  printf("\n");
 }
 
-bool para_equal(paragraph* p, paragraph* q) {
-  if (p == NULL || q == NULL) { return false; }
-  else if(p->size != q->size){ return false; }
-  int i = p->begin, j = q->begin, equal = 0;
-  while ((equal = strcmp(p->master_content[i], q->master_content[i])) == 0 && i < p->end && j < q->end) { ++i; ++j; }
+bool paragraph_equal(paragraph* p, paragraph* q){
+  if(paragraph_size(p) != paragraph_size(q)){ return false; }
+  int i = p->begin, j = q->begin;
+  for(i, j; i < p->end || j < q->end; ++i, ++j){
+    if(i >= p->end){ return false; }
+    else if(strcmp(p->master_content[i], q->master_content[j]) != 0){ return false; }
+  }
+  return true;
+}
+
+bool paragraph_network_equal(paragraph_network* p, paragraph_network* q){
+  if(p->size != q->size){ return false; }
+  for(int i = 0, j = 0; i < p->size && j < q->size; ++i, ++j){
+    if(!paragraph_equal(p->paragraph_nodes[i], q->paragraph_nodes[j])){ return false; }
+  }
   return true;
 }
 

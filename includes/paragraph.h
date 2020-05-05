@@ -17,6 +17,6 @@ paragraph_network* paragraph_network_constructor(void);
 
 void paragraph_destructor(paragraph*);
 void paragraph_network_destructor(paragraph_network*);
-void paragraph_print(FILE*, paragraph*);
+void paragraph_print(paragraph*, void(*fp)(const char*));
 
 void paragraph_network_add_paragraph(paragraph_network*, paragraph*);

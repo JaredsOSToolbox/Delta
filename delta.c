@@ -4,7 +4,9 @@
 #include <stdbool.h>
 
 #include "includes/file_struct.h"
+#include "includes/paragraph.h"
 #include "includes/delta.h"
+#include "includes/printer.h"
 
 const char* AUTHOR = "Jared Dyreson";
 const char* COAUTHOR = "William McCarthy";
@@ -49,19 +51,54 @@ void read_all_args(int argc, const char* argv[]){
   }
 }
 
-int main(int argc, const char* argv[]){
-  read_all_args(--argc, ++argv);
-  struct file_* a = file_constructor("inputs/test");
-  struct file_* b = file_constructor("inputs/test_two");
-  slice(a);
-  char* message = (char*)malloc(BUFSIZ*2*sizeof(char));
-  memset(message, 0, strlen(message));
-  bool are_same = compare_contents(a, b, message);
-  printf("%s", message);
+/*void testing(){*/
+  /*char* message = (char*)malloc(BUFSIZ*2*sizeof(char));*/
+  /*memset(message, 0, strlen(message));*/
+  /*bool are_same = compare_contents(a, b, message);*/
+  /*printf("%s", message);*/
+  /*slice(a);*/
   /*printf("amount of paragraphs in a is: %zu\n", a->para_network->size);*/
   /*for(int i = 0; i < a->para_network->size; ++i){*/
     /*paragraph_print(stdout, a->para_network->paragraph_nodes[i]);*/
   /*}*/
+/*}*/
+
+int main(int argc, const char* argv[]){
+  read_all_args(--argc, ++argv);
+  struct file_* a = file_constructor("inputs/right.txt");
+  struct file_* b = file_constructor("inputs/left.txt");
+
+  slice(a);
+  slice(b);
+
+  bool match = paragraph_network_equal(a->para_network, b->para_network);
+  if(match){
+    printf("they are the same!\n");
+  } else{
+    printf("not the same!\n");
+  }
+
+  /*if(match){*/
+    /*while((match = para_equal(p, q)) == 0){*/
+      /*paragraph_print(q, print_right);*/
+      /*q = para_next(q);*/
+      /*qlast = q;*/
+    /*}*/
+    /*paragraph_print(q, print_both);*/
+    /*p = para_next(p);*/
+    /*q = para_next(q);*/
+
+  /*}*/
+    /*else{*/
+      /*paragraph_print(p, print_left);*/
+      /*p = para_next(p);*/
+    /*}*/
+
+  /*while(q != NULL){*/
+    /*paragraph_print(q, print_right);*/
+    /*p = para_next(p);*/
+  /*}*/
+  
 
   /*if(version){*/
     /*print_version();*/
