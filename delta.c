@@ -101,28 +101,6 @@ int main(int argc, const char* argv[]){
     }
   }
 
-  /*if(match){*/
-    /*while((match = para_equal(p, q)) == 0){*/
-      /*paragraph_print(q, print_right);*/
-      /*q = para_next(q);*/
-      /*qlast = q;*/
-    /*}*/
-    /*paragraph_print(q, print_both);*/
-    /*p = para_next(p);*/
-    /*q = para_next(q);*/
-
-  /*}*/
-    /*else{*/
-      /*paragraph_print(p, print_left);*/
-      /*p = para_next(p);*/
-    /*}*/
-
-  /*while(q != NULL){*/
-    /*paragraph_print(q, print_right);*/
-    /*p = para_next(p);*/
-  /*}*/
-  
-
   /*if(version){*/
     /*print_version();*/
   /*} else if(brief || report_identical){*/

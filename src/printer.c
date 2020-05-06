@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "../includes/printer.h"
 #include "../includes/paragraph.h"
@@ -33,7 +34,6 @@ void print_both(char* left_right) {
 // these implementations work for me
 
 char* format_left_justified(paragraph* p){
-  printf("calling %s\n", __func__);
   size_t EOS;
   char buffer[BUFSIZ];
   char* left_justified = (char*)malloc(MAX_FORMAT_STR_SIZ * sizeof(char));
@@ -45,20 +45,33 @@ char* format_left_justified(paragraph* p){
   left_justified[EOS-1] = '\0';
   return left_justified;
 }
+
+char* format_right_justified(paragraph* p){
+  size_t EOS;
+  char buffer[BUFSIZ];
+  char* right_justified = (char*)malloc(MAX_FORMAT_STR_SIZ * sizeof(char));
+  for(int i = p->begin; i < p->end; ++i){
+    sprintf(buffer, "%50s %s", ">", p->master_content[i]);
+    strcat(right_justified, buffer);
+    EOS+=strlen(buffer);
+  }
+  right_justified[EOS-1] = '\0';
+  return right_justified;
+}
+
 void print_left_justified(paragraph* p){
-  if(p == NULL){ return; }
+  if(p == NULL){ printf("p is null\n"); return; }
   char* left = format_left_justified(p);
-  printf("%s", left);
-  printf("\n");
+  printf("%s\n", left);
   free(left);
   left = NULL;
 }
 
 void print_right_justified(paragraph* p){
   if(p == NULL){ return; }
-  for(int i = p->begin; i < p->end; ++i){
-    printf("%50s %s", ">", p->master_content[i]);
-  }
-  printf("\n");
+  char* right = format_right_justified(p);
+  printf("%s\n", right);
+  free(right);
+  right = NULL;
 }
 

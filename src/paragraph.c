@@ -83,36 +83,65 @@ bool paragraph_network_equal(paragraph_network* p, paragraph_network* q, int* ql
   return true;
 }
 
-/*void print_paragraph_networks(paragraph_network* p, paragraph_network* q, int qlast_index){*/
-  /*bool switch_flag = false; */
-  /*int i = 0, j = 0;*/
-  /*for(i, j; i < p->size && j < q->size ; ++i, ++j){*/
-    /*if(!paragraph_equal(p->paragraph_nodes[i], q->paragraph_nodes[j])){ */
-      /*switch_flag = true;*/
-      /*break; */
-      /*printf("breaking\n");*/
-    /*}*/
-    /*else{*/
-      /*printf("print_right\n");*/
-    /*}*/
-  /*}*/
-  /*if(switch_flag){*/
-    /*printf("print_both\n");*/
-    /*printf("i: %d\nj: %d\n", i, j);*/
-  /*}*/
-  /*for(i, j; i <= p->size && j <= q->size; ++i, ++j){*/
-    /*printf("print right?\n");*/
-  /*}*/
-/*}*/
-
 void print_paragraph_networks(paragraph_network* p, paragraph_network* q){
-  while(paragraph_equal(*p->paragraph_nodes++, *q->paragraph_nodes++)){
-    printf("testing printing the paragraph from here!\n");
-    /*paragraph_vanilla_print(*q->paragraph_nodes);*/
-    print_left_justified(*q->paragraph_nodes);
-    printf("iterating over this collection!\n");
+  bool foundmatch = false;
+  /*paragraph** P = p->paragraph_nodes;*/
+  /*paragraph** Q = q->paragraph_nodes;*/
+  /*return;*/
+
+  while(*p->paragraph_nodes++ != NULL){
+
+    paragraph* qlast = *q->paragraph_nodes;
+    while((foundmatch = paragraph_equal(*p->paragraph_nodes, *q->paragraph_nodes++)) == true){ printf("in the first while loop!\n"); }
+    qlast = *q->paragraph_nodes;
+
+    if(foundmatch){
+      while((foundmatch = paragraph_equal(*p->paragraph_nodes, *q->paragraph_nodes++)) == true){
+        print_right_justified(*q->paragraph_nodes);
+        qlast = *q->paragraph_nodes;
+
+      }
+      printf("print both here!\n");
+      // print_parallel(*p->paragraph_nodes++, *q->paragraph_nodes);
+    }
+    else{
+      printf("here!\n");
+      print_left_justified(*p->paragraph_nodes);
+      printf("if this prints twice then there is a seg fault here!\n");
+    }
+  }
+  while(*q->paragraph_nodes++ != NULL){
+    print_right_justified(*q->paragraph_nodes);
   }
 }
+/*para* qlast = q;*/
+/*while (p != NULL) {*/
+  /*qlast = q;*/
+  /*foundmatch = 0;*/
+  /*while (q != NULL && (foundmatch = para_equal(p, q)) == 0) {*/
+    /*q = para_next(q);*/
+  /*}*/
+  /*q = qlast;*/
+
+  /*if (foundmatch) {*/
+    /*while ((foundmatch = para_equal(p, q)) == 0) {*/
+      /*para_print(q, printright);*/
+      /*q = para_next(q);*/
+      /*qlast = q;*/
+    /*}*/
+    /*para_print(q, printboth);*/
+    /*p = para_next(p);*/
+    /*q = para_next(q);*/
+  /*} else {*/
+    /*para_print(p, printleft);*/
+    /*p = para_next(p);*/
+  /*}*/
+/*}*/
+/*while (q != NULL) {*/
+  /*para_print(q, printright);*/
+  /*q = para_next(q);*/
+/*}*/
+
 
 paragraph* para_next(struct file_* a, paragraph* p) {
   if (p == NULL || p->end == a->length) { return NULL; }
