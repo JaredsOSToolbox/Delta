@@ -48,9 +48,7 @@ void paragraph_network_add_paragraph(paragraph_network* network, paragraph* para
 }
 
 void paragraph_print(paragraph* para, void (*fp)(const char*)){
-  printf("calling %s\n", __func__);
   for(int i = para->begin; i < para->end; ++i){
-    printf("sending: %s\n", para->master_content[i]);
     fp(para->master_content[i]);
   }
   printf("\n");
@@ -85,25 +83,34 @@ bool paragraph_network_equal(paragraph_network* p, paragraph_network* q, int* ql
   return true;
 }
 
-void print_paragraph_networks(paragraph_network* p, paragraph_network* q, int qlast_index){
-  bool switch_flag = false; 
-  int i = 0, j = 0;
-  for(i, j; i < p->size && j < q->size ; ++i, ++j){
-    if(!paragraph_equal(p->paragraph_nodes[i], q->paragraph_nodes[j])){ 
-      switch_flag = true;
-      break; 
-      printf("breaking\n");
-    }
-    else{
-      printf("print_right\n");
-    }
-  }
-  if(switch_flag){
-    printf("print_both\n");
-    printf("i: %d\nj: %d\n", i, j);
-  }
-  for(i, j; i <= p->size && j <= q->size; ++i, ++j){
-    printf("print right?\n");
+/*void print_paragraph_networks(paragraph_network* p, paragraph_network* q, int qlast_index){*/
+  /*bool switch_flag = false; */
+  /*int i = 0, j = 0;*/
+  /*for(i, j; i < p->size && j < q->size ; ++i, ++j){*/
+    /*if(!paragraph_equal(p->paragraph_nodes[i], q->paragraph_nodes[j])){ */
+      /*switch_flag = true;*/
+      /*break; */
+      /*printf("breaking\n");*/
+    /*}*/
+    /*else{*/
+      /*printf("print_right\n");*/
+    /*}*/
+  /*}*/
+  /*if(switch_flag){*/
+    /*printf("print_both\n");*/
+    /*printf("i: %d\nj: %d\n", i, j);*/
+  /*}*/
+  /*for(i, j; i <= p->size && j <= q->size; ++i, ++j){*/
+    /*printf("print right?\n");*/
+  /*}*/
+/*}*/
+
+void print_paragraph_networks(paragraph_network* p, paragraph_network* q){
+  while(paragraph_equal(*p->paragraph_nodes++, *q->paragraph_nodes++)){
+    printf("testing printing the paragraph from here!\n");
+    /*paragraph_vanilla_print(*q->paragraph_nodes);*/
+    print_left_justified(*q->paragraph_nodes);
+    printf("iterating over this collection!\n");
   }
 }
 

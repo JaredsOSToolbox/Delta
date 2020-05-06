@@ -94,7 +94,7 @@ int main(int argc, const char* argv[]){
     }
     else{
       printf("here is where normal mode comes in\n");
-      print_paragraph_networks(a->para_network, b->para_network, qlast_index);
+      print_paragraph_networks(a->para_network, b->para_network);
       // iterate over the collection
       // while there is a match, print right
       // once this condition is false, we need to stop iterating and  
