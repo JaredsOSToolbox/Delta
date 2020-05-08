@@ -51,18 +51,6 @@ void read_all_args(int argc, const char* argv[]){
   }
 }
 
-/*void testing(){*/
-  /*char* message = (char*)malloc(BUFSIZ*2*sizeof(char));*/
-  /*memset(message, 0, strlen(message));*/
-  /*bool are_same = compare_contents(a, b, message);*/
-  /*printf("%s", message);*/
-  /*slice(a);*/
-  /*printf("amount of paragraphs in a is: %zu\n", a->para_network->size);*/
-  /*for(int i = 0; i < a->para_network->size; ++i){*/
-    /*paragraph_print(stdout, a->para_network->paragraph_nodes[i]);*/
-  /*}*/
-/*}*/
-
 int main(int argc, const char* argv[]){
   read_all_args(--argc, ++argv);
   if(version){
@@ -78,7 +66,12 @@ int main(int argc, const char* argv[]){
 
   int qlast_index = -1;
   paragraph* qlast;
+
+  printf("%s%50s\n", a->file_path, b->file_path);
+  print_paragraph_networks(a->para_network, b->para_network);
+  return 0;
   bool match = paragraph_network_equal(a->para_network, b->para_network, &qlast_index);
+
   if(qlast_index != EOF){ qlast = b->para_network->paragraph_nodes[qlast_index]; }
   if(match){
     if(brief || report_identical){
@@ -95,9 +88,6 @@ int main(int argc, const char* argv[]){
     else{
       printf("here is where normal mode comes in\n");
       print_paragraph_networks(a->para_network, b->para_network);
-      // iterate over the collection
-      // while there is a match, print right
-      // once this condition is false, we need to stop iterating and  
     }
   }
 

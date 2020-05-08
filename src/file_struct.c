@@ -57,6 +57,7 @@ void repr(struct file_* f){
 
 void read_contents(struct file_* f){
   char *line;
+  char* pos;
   size_t len = 0;
   ssize_t read;
   int line_number_ = 0, paragraph_index = 0, paragraph_start = 0, paragraph_end = 0;
@@ -70,6 +71,7 @@ void read_contents(struct file_* f){
   }
   
   while ((read = getline(&line, &len, file_in)) != EOF) {
+    /*if((pos = strchr(line, '\n')) != NULL){ *pos = '\0'; }*/
     f->contents[line_number_] = malloc((strlen(line)+1) * sizeof(char));
     sprintf(f->contents[line_number_], "%s", line);
     line_number_++;

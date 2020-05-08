@@ -3,12 +3,14 @@ typedef struct paragraph{
   int begin, end;
   char** master_content;
   size_t size;
+  //char* name;
 } paragraph;
 
 typedef struct paragraph_network{
   paragraph** paragraph_nodes;
   size_t size;
   size_t stack_pointer;
+  //char* name;
 } paragraph_network;
 
 

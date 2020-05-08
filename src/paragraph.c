@@ -20,7 +20,7 @@ paragraph* paragraph_constructor(char** content, int begin, int end){
 }
 
 paragraph_network* paragraph_network_constructor(){
-  paragraph_network* network = (paragraph_network*)malloc(sizeof(paragraph_constructor));
+  paragraph_network* network = (paragraph_network*)malloc(sizeof(paragraph));
   network->size = 0;
   network->stack_pointer = 0;
   network->paragraph_nodes = (paragraph*)malloc(NUMBER_OF_PARAGRAPHS * sizeof(paragraph));
@@ -30,8 +30,6 @@ paragraph_network* paragraph_network_constructor(){
 void paragraph_destructor(paragraph* para){
   free(para);
 }
-
-int paragraph_size(paragraph* p){ return (p->end - p->begin)+2; }
 
 void paragraph_network_destructor(paragraph_network* network){
   for(int i = 0; i < network->size; ++i){
@@ -47,13 +45,6 @@ void paragraph_network_add_paragraph(paragraph_network* network, paragraph* para
   network->paragraph_nodes[network->size++] = para;
 }
 
-void paragraph_print(paragraph* para, void (*fp)(const char*)){
-  for(int i = para->begin; i < para->end; ++i){
-    fp(para->master_content[i]);
-  }
-  printf("\n");
-}
-
 void paragraph_vanilla_print(paragraph* p){
   for(int i = p->begin; i < p->end; ++i){
     printf("%s", p->master_content[i]);
@@ -62,14 +53,32 @@ void paragraph_vanilla_print(paragraph* p){
 }
 
 bool paragraph_equal(paragraph* p, paragraph* q){
-  if(paragraph_size(p) != paragraph_size(q)){ return false; }
-  int i = p->begin, j = q->begin;
-  for(i, j; i < p->end || j < q->end; ++i, ++j){
-    if(strcmp(p->master_content[i], q->master_content[j]) != 0 || (i >= p->end)){ 
-      return false; 
+  bool found_match = true;
+
+  if(p == NULL || q == NULL){ return !found_match; }
+  else if(p == NULL && q == NULL){ return found_match; }
+  else if(p->size != q->size){ return !found_match; }
+
+  int p_begin = p->begin;
+  int q_begin = q->begin;
+
+  while((p_begin++ > p->end) && (q_begin++ > q->end)){
+    if(strcmp(*p->master_content[p_begin], *q->master_content[q_begin]) != 0){
+      return !found_match;
     }
   }
-  return true;
+
+  return found_match;
+
+  /*if(p->size != q->size){ printf("mismatch size for p and q!\n"); return !found_match; }*/
+  /*while(*p_head != NULL && *q_head != NULL){*/
+    /*++count;*/
+    /*printf("value of p_head: %s", p_head);*/
+    /*printf("value of q_head: %s", q_head);*/
+    /*if(strcmp(p_head++, q_head++) != 0){ found_match = false; }*/
+  /*}*/
+  /*printf("%s returning value of %s and our while loop has run a total of %d times\n", __func__, (found_match) ? "true": "false", count);*/
+  /*return found_match;*/
 }
 
 bool paragraph_network_equal(paragraph_network* p, paragraph_network* q, int* qlast_index){
@@ -85,62 +94,35 @@ bool paragraph_network_equal(paragraph_network* p, paragraph_network* q, int* ql
 
 void print_paragraph_networks(paragraph_network* p, paragraph_network* q){
   bool foundmatch = false;
-  /*paragraph** P = p->paragraph_nodes;*/
-  /*paragraph** Q = q->paragraph_nodes;*/
-  /*return;*/
+  paragraph** p_head = p->paragraph_nodes;
+  paragraph** q_head = q->paragraph_nodes;
 
-  while(*p->paragraph_nodes++ != NULL){
+  // TODO
+  // Print the names for context
 
-    paragraph* qlast = *q->paragraph_nodes;
-    while((foundmatch = paragraph_equal(*p->paragraph_nodes, *q->paragraph_nodes++)) == true){ printf("in the first while loop!\n"); }
-    qlast = *q->paragraph_nodes;
-
+  while(*p_head != NULL){
+    while(*q_head != NULL && (foundmatch == false)){
+      foundmatch = paragraph_equal(*p_head, *q_head++);
+    }
     if(foundmatch){
-      while((foundmatch = paragraph_equal(*p->paragraph_nodes, *q->paragraph_nodes++)) == true){
-        print_right_justified(*q->paragraph_nodes);
-        qlast = *q->paragraph_nodes;
-
+      while(*q_head != NULL && (foundmatch == false)){
+        printf("print on the right please\n");
+        foundmatch = paragraph_equal(*p_head, *q_head);
+        print_right_justified(*q_head++);
       }
+      format_both_on_line(*p_head++, *q_head++);
+      /**p_head++;*/
+      /**q_head++;*/
       printf("print both here!\n");
-      // print_parallel(*p->paragraph_nodes++, *q->paragraph_nodes);
     }
     else{
-      printf("here!\n");
-      print_left_justified(*p->paragraph_nodes);
-      printf("if this prints twice then there is a seg fault here!\n");
+      print_left_justified(*p_head++);
     }
   }
-  while(*q->paragraph_nodes++ != NULL){
-    print_right_justified(*q->paragraph_nodes);
+  while(*q_head != NULL){
+    print_right_justified(*q_head++);
   }
 }
-/*para* qlast = q;*/
-/*while (p != NULL) {*/
-  /*qlast = q;*/
-  /*foundmatch = 0;*/
-  /*while (q != NULL && (foundmatch = para_equal(p, q)) == 0) {*/
-    /*q = para_next(q);*/
-  /*}*/
-  /*q = qlast;*/
-
-  /*if (foundmatch) {*/
-    /*while ((foundmatch = para_equal(p, q)) == 0) {*/
-      /*para_print(q, printright);*/
-      /*q = para_next(q);*/
-      /*qlast = q;*/
-    /*}*/
-    /*para_print(q, printboth);*/
-    /*p = para_next(p);*/
-    /*q = para_next(q);*/
-  /*} else {*/
-    /*para_print(p, printleft);*/
-    /*p = para_next(p);*/
-  /*}*/
-/*}*/
-/*while (q != NULL) {*/
-  /*para_print(q, printright);*/
-  /*q = para_next(q);*/
-/*}*/
 
 
 paragraph* para_next(struct file_* a, paragraph* p) {
