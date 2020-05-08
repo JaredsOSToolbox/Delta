@@ -61,16 +61,12 @@ int main(int argc, const char* argv[]){
   struct file_* a = file_constructor("inputs/test");
   struct file_* b = file_constructor("inputs/test_two");
 
-  slice(a);
-  slice(b);
-
-  int qlast_index = -1;
+  int qlast_index = EOF;
   paragraph* qlast;
 
-  printf("%s%50s\n", a->file_path, b->file_path);
-  print_paragraph_networks(a->para_network, b->para_network);
+  bool match = paragraph_network_equal(*a->para_network, *b->para_network);
+  printf("these two files are the same: %s", (match) ? "true" : "false");
   return 0;
-  bool match = paragraph_network_equal(a->para_network, b->para_network, &qlast_index);
 
   if(qlast_index != EOF){ qlast = b->para_network->paragraph_nodes[qlast_index]; }
   if(match){
@@ -87,22 +83,11 @@ int main(int argc, const char* argv[]){
     }
     else{
       printf("here is where normal mode comes in\n");
+      printf("%s%50s\n", a->file_path, b->file_path);
       print_paragraph_networks(a->para_network, b->para_network);
     }
   }
 
-  /*if(version){*/
-    /*print_version();*/
-  /*} else if(brief || report_identical){*/
-    /*if(!compare_contents(a, b)){*/
-      /*printf("Files %s and %s differ\n", a->file_path, b->file_path);*/
-    /*}*/
-    /*else{*/
-      /*printf("Files %s and %s are identical\n", a->file_path, b->file_path);*/
-    /*}*/
-  /*} else if(normal){*/
-    /*printf("this is normal diff!\n");*/
-  /*}*/
   file_destructor(a);
   file_destructor(b);
   return 0;

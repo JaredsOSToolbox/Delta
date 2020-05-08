@@ -21,6 +21,7 @@ struct file_* file_constructor(const char* file_path){
   sprintf(f->file_path, "%s", file_path);
   f->para_network = paragraph_network_constructor();
   read_contents(f);
+  slice(f);
   return f;
 }
 
