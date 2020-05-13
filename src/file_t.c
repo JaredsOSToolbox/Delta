@@ -7,6 +7,7 @@
 #include "../includes/file_t.h"
 #include "../includes/paragraph.h"
 #include "../includes/printer.h"
+// this is a quick change to test if Make will compile!
 
 #define NUMBER_OF_STRINGS 1000
 #define MAX_STRING_SIZE 1000
