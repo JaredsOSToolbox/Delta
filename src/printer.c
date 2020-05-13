@@ -38,6 +38,7 @@ char* format_left_justified(paragraph* p){
   char buffer[BUFSIZ];
   memset(buffer, 0, sizeof(buffer));
   char* left_justified = (char*)malloc(MAX_FORMAT_STR_SIZ * sizeof(char));
+  memset(left_justified, 0, sizeof(left_justified));
   for(int i = p->begin; i < p->end; ++i){
     sprintf(buffer, "%s %s", "<", p->master_content[i]);
     strcat(left_justified, buffer);
@@ -52,6 +53,7 @@ char* format_right_justified(paragraph* p){
   char buffer[BUFSIZ];
   memset(buffer, 0, sizeof(buffer));
   char* right_justified = (char*)malloc(MAX_FORMAT_STR_SIZ * sizeof(char));
+  memset(right_justified, 0, sizeof(right_justified));
   for(int i = p->begin; i < p->end; ++i){
     sprintf(buffer, "%50s %s", ">", p->master_content[i]);
     strcat(right_justified, buffer);
@@ -79,10 +81,13 @@ void print_right_justified(paragraph* p){
 
 
 void format_both_on_line(paragraph* p, paragraph* q){
-  if(p == NULL || q == NULL){ printf("there is a null object, cowardly refusing!\n"); return; }
-  char* p_format = format_left_justified(p);
-  char* q_format = format_right_justified(q);
-  printf("%s %s", p_format, q_format);
-  free(p_format);
-  free(q_format);
+  if(p == NULL || q == NULL){  return; }
+  for(int i = p->begin; i < p->end; ++i){
+    printf("%-50s", p->master_content[i]);
+  }
+  /*char* p_format = format_left_justified(p);*/
+  /*char* q_format = format_right_justified(q);*/
+  /*printf("%s %s", p_format, q_format);*/
+  /*free(p_format);*/
+  /*free(q_format);*/
 }

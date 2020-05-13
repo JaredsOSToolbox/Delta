@@ -52,7 +52,7 @@ void read_all_args(int argc, const char* argv[]){
 }
 
 int main(int argc, const char* argv[]){
-  read_all_args(--argc, ++argv);
+  /*read_all_args(--argc, ++argv);*/
   if(version){
     print_version();
     return 0;
@@ -65,8 +65,6 @@ int main(int argc, const char* argv[]){
   paragraph* qlast;
 
   bool match = paragraph_network_equal(*a->para_network, *b->para_network);
-  printf("these two files are the same: %s", (match) ? "true" : "false");
-  return 0;
 
   if(qlast_index != EOF){ qlast = b->para_network->paragraph_nodes[qlast_index]; }
   if(match){

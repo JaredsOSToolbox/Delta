@@ -59,7 +59,6 @@ bool paragraph_equal(paragraph* p, paragraph* q){
   if(p->size != q->size){ return false; }
   int i = p->begin, j = q->begin;
   for(;i < p->end && j < q->end && i < j; ++i, ++j){
-    printf("comparing: %s\n, %s", p->master_content[i], q->master_content[j]);
     if(strcmp(p->master_content[i], q->master_content[j]) != 0){ return false; }
   }
   if(i < j){ return false; }
@@ -79,32 +78,27 @@ bool paragraph_network_equal(paragraph_network* p, paragraph_network* q, int* ql
 
 void print_paragraph_networks(paragraph_network* p, paragraph_network* q){
   bool foundmatch = false;
+
   paragraph** p_head = p->paragraph_nodes;
   paragraph** q_head = q->paragraph_nodes;
 
-  // TODO
-  // Print the names for context
-
   while(*p_head != NULL){
-    while(*q_head != NULL && (foundmatch == false)){
-      foundmatch = paragraph_equal(*p_head, *q_head++);
-    }
+    while(*q_head != NULL && (foundmatch = paragraph_equal(*p_head, *q_head)) == false){*q_head++;}
     if(foundmatch){
-      while(*q_head != NULL && (foundmatch == false)){
-        printf("print on the right please\n");
-        foundmatch = paragraph_equal(*p_head, *q_head);
+      while(*q_head != NULL && (foundmatch = paragraph_equal(*p_head, *q_head)) == false){
+        printf("print right!\n");
         print_right_justified(*q_head++);
       }
+      printf("print both!\n");
       format_both_on_line(*p_head++, *q_head++);
-      /**p_head++;*/
-      /**q_head++;*/
-      printf("print both here!\n");
     }
     else{
+      printf("print left!\n");
       print_left_justified(*p_head++);
     }
   }
   while(*q_head != NULL){
+    printf("print right!\n");
     print_right_justified(*q_head++);
   }
 }
