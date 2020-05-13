@@ -34,6 +34,7 @@ void file_destructor(file_t* f){
   free(f->contents);
   free(f->file_path);
   free(f);
+  f = NULL;
 }
 
 bool is_eq(file_t* a, file_t* b){

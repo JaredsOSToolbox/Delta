@@ -8,6 +8,10 @@
 
 #define NUMBER_OF_PARAGRAPHS 100
 
+#define LESS_THAN -1
+#define GREATER_THAN 1
+#define EQUAL 0
+
 int my_max(int a, int b){ return (a > b) ? a : b; }
 
 
@@ -58,10 +62,9 @@ void paragraph_network_add_paragraph(paragraph_network* network, paragraph* para
 bool paragraph_equal(paragraph* p, paragraph* q){
   if(p->size != q->size){ return false; }
   int i = p->begin, j = q->begin;
-  for(;i < p->end && j < q->end && i < j; ++i, ++j){
+  for(;i < p->end && j < q->end || i < j; ++i, ++j){
     if(strcmp(p->master_content[i], q->master_content[j]) != 0){ return false; }
   }
-  if(i < j){ return false; }
   return true;
 }
 
@@ -103,6 +106,21 @@ void print_paragraph_networks(paragraph_network* p, paragraph_network* q){
   }
 }
 
+int paragraph_cmp(paragraph* p, paragraph* q){
+  if(p->size != q->size){
+    if(p->size < q->size || p == NULL){ return LESS_THAN; }
+    return GREATER_THAN;
+  }
+  int i = p->begin, j = q->begin;
+
+  for(; i < p->end && j < q->end; ++i, ++j){
+    int r = strcmp(p->master_content[i], q->master_content[j]);
+    if(r >= 1){ return GREATER_THAN; }
+    else if(r <= -1){ return LESS_THAN; }
+  }
+  if(i == j){ return EQUAL; }
+  return (i < j) ? LESS_THAN : GREATER_THAN;
+}
 
 paragraph* para_next(file_t* a, paragraph* p) {
   if (p == NULL || p->end == a->length) { return NULL; }

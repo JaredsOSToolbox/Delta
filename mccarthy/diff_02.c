@@ -160,19 +160,23 @@ int main(int argc, const char * argv[]) {
 
     if (foundmatch) {
       while ((foundmatch = para_equal(p, q)) == 0) {
+        printf("print right!\n");
         para_print(q, printright);
         q = para_next(q);
         qlast = q;
       }
+      printf("print both!\n");
       para_print(q, printboth);
       p = para_next(p);
       q = para_next(q);
     } else {
+      printf("print left!\n");
       para_print(p, printleft);
       p = para_next(p);
     }
   }
   while (q != NULL) {
+    printf("print right!\n");
     para_print(q, printright);
     q = para_next(q);
   }

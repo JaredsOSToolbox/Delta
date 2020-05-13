@@ -57,37 +57,37 @@ int main(int argc, const char* argv[]){
     print_version();
     return 0;
   }
-
-  file_t* a = file_constructor("inputs/test");
-  file_t* b = file_constructor("inputs/test_two");
-
-  int qlast_index = EOF;
-  paragraph* qlast;
-
-  bool match = paragraph_network_equal(*a->para_network, *b->para_network);
-
-  if(qlast_index != EOF){ qlast = b->para_network->paragraph_nodes[qlast_index]; }
-  if(match){
-    if(brief || report_identical){
-      printf("%sFiles %s and %s are identical%s\n",
-              ANSI_COLOR_GREEN, a->file_path, b->file_path, ANSI_COLOR_RESET);
-      return 0;
-    }
-  } else{
-    if(brief){
-      printf("%sFiles %s and %s differ%s\n",
-              ANSI_COLOR_RED, a->file_path, b->file_path, ANSI_COLOR_RESET);
-      return 0;
-    }
-    else{
-      printf("here is where normal mode comes in\n");
-      printf("%s%50s\n", a->file_path, b->file_path);
-      print_paragraph_networks(a->para_network, b->para_network);
-    }
-  }
-
-  file_destructor(a);
-  file_destructor(b);
+  paragraph_equal_assert();
   return 0;
+  /*file_t* a = file_constructor("inputs/left.txt");*/
+  /*file_t* b = file_constructor("inputs/right.txt");*/
+
+  /*int qlast_index = EOF;*/
+  /*paragraph* qlast = NULL;*/
+
+  /*bool match = paragraph_network_equal(*a->para_network, *b->para_network);*/
+
+  /*if(qlast_index != EOF){ qlast = b->para_network->paragraph_nodes[qlast_index]; }*/
+  /*if(match){*/
+    /*if(brief || report_identical){*/
+      /*printf("%sFiles %s and %s are identical%s\n",*/
+              /*ANSI_COLOR_GREEN, a->file_path, b->file_path, ANSI_COLOR_RESET);*/
+      /*return 0;*/
+    /*}*/
+  /*} else{*/
+    /*if(brief){*/
+      /*printf("%sFiles %s and %s differ%s\n",*/
+              /*ANSI_COLOR_RED, a->file_path, b->file_path, ANSI_COLOR_RESET);*/
+      /*return 0;*/
+    /*}*/
+    /*else{*/
+      /*printf("%s%50s\n", a->file_path, b->file_path);*/
+      /*print_paragraph_networks(a->para_network, b->para_network);*/
+    /*}*/
+  /*}*/
+
+  /*file_destructor(a);*/
+  /*file_destructor(b);*/
+  /*return 0;*/
 }
 
