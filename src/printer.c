@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../includes/printer.h"
 #include "../includes/paragraph.h"
+#include "../includes/printer.h"
 
 #define MAX_FORMAT_STR_SIZ 1000
 
@@ -31,7 +31,7 @@ void print_both(char* left_right) {
 }
 
 
-// these implementations work for me
+// these implementations work for me, sorta
 
 char* format_left_justified(paragraph* p){
   size_t EOS;

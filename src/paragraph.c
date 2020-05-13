@@ -2,8 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "../includes/file_t.h"
 #include "../includes/paragraph.h"
-#include "../includes/file_struct.h"
 #include "../includes/printer.h"
 
 #define NUMBER_OF_PARAGRAPHS 100
@@ -104,7 +104,7 @@ void print_paragraph_networks(paragraph_network* p, paragraph_network* q){
 }
 
 
-paragraph* para_next(struct file_* a, paragraph* p) {
+paragraph* para_next(file_t* a, paragraph* p) {
   if (p == NULL || p->end == a->length) { return NULL; }
   
   int i;
@@ -119,12 +119,12 @@ paragraph* para_next(struct file_* a, paragraph* p) {
   return pnew;
 }
 
-paragraph* para_first(struct file_* a) {
+paragraph* para_first(file_t* a) {
   paragraph* p = paragraph_constructor(a->contents, 0, -1);
   return para_next(a, p);
 }
 
-void slice(struct file_* a){
+void slice(file_t* a){
   paragraph* current = para_first(a);
   while(current != NULL){
     paragraph_network_add_paragraph(a->para_network, current);

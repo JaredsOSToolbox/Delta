@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include "../includes/file_struct.h"
+#include "../includes/file_t.h"
 #include "../includes/paragraph.h"
 #include "../includes/printer.h"
 
@@ -14,8 +14,8 @@
 #define NUMBER_OF_PARAGRAPHS 500
 
 
-struct file_* file_constructor(const char* file_path){
-  struct file_ *f =  (struct file_*)malloc(sizeof(struct file_));
+file_t* file_constructor(const char* file_path){
+  file_t *f =  (file_t*)malloc(sizeof(file_t));
   f->contents = malloc(NUMBER_OF_STRINGS * sizeof(char*));
   f->file_path = malloc(sizeof(char*));
   sprintf(f->file_path, "%s", file_path);
@@ -25,7 +25,7 @@ struct file_* file_constructor(const char* file_path){
   return f;
 }
 
-void file_destructor(struct file_* f){
+void file_destructor(file_t* f){
   for(int i = 0; i < NUMBER_OF_STRINGS; ++i){
     free(f->contents[i]);
   }
@@ -35,7 +35,7 @@ void file_destructor(struct file_* f){
   free(f);
 }
 
-bool is_eq(struct file_* a, struct file_* b){
+bool is_eq(file_t* a, file_t* b){
   char* message = (char*)malloc(sizeof(char)*BUFSIZ);
   bool fn = (strcmp(a->file_path, b->file_path) == 0);  
   bool len = (a->length == b->length);
@@ -44,9 +44,9 @@ bool is_eq(struct file_* a, struct file_* b){
   return (fn && len && contents);
 }
 
-bool is_neq(struct file_*a, struct file_* b){ return !is_eq(a, b); }
+bool is_neq(file_t*a, file_t* b){ return !is_eq(a, b); }
 
-void repr(struct file_* f){
+void repr(file_t* f){
   printf("Path: %s\n", f->file_path);
   printf("File length: %d\n", f->length);
   printf("Contents of file: \n");
@@ -56,7 +56,7 @@ void repr(struct file_* f){
 
 // member functions
 
-void read_contents(struct file_* f){
+void read_contents(file_t* f){
   char *line;
   char* pos;
   size_t len = 0;
@@ -80,7 +80,7 @@ void read_contents(struct file_* f){
   f->length = line_number_;
 }
 
-void print_contents(FILE* stream, struct file_* f, bool numbered){
+void print_contents(FILE* stream, file_t* f, bool numbered){
   char buffer[BUFSIZ];
   for(int i = 0; i < f->length; ++i){
     sprintf(buffer, "[%d]: ", i);
@@ -88,16 +88,16 @@ void print_contents(FILE* stream, struct file_* f, bool numbered){
   }
 }
 
-void print_contents_numbered(FILE* stream, struct file_* f){
+void print_contents_numbered(FILE* stream, file_t* f){
   print_contents(stream, f, true);
 }
 
-void print_contents_normal(FILE* stream, struct file_* f){
+void print_contents_normal(FILE* stream, file_t* f){
   print_contents(stream, f, false);
 }
 
 
-bool compare_contents(struct file_* a, struct file_* b, char* message){
+bool compare_contents(file_t* a, file_t* b, char* message){
   char buffer[BUFSIZ];
   if(a->length != b->length){ 
     sprintf(message, "%sFiles %s(%d) and %s(%d) differ in length, delta of %d lines %s\n",

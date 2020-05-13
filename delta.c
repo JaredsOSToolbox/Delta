@@ -3,9 +3,9 @@
 #include <string.h>
 #include <stdbool.h>
 
-#include "includes/file_struct.h"
-#include "includes/paragraph.h"
 #include "includes/delta.h"
+#include "includes/file_t.h"
+#include "includes/paragraph.h"
 #include "includes/printer.h"
 
 const char* AUTHOR = "Jared Dyreson";
@@ -58,8 +58,8 @@ int main(int argc, const char* argv[]){
     return 0;
   }
 
-  struct file_* a = file_constructor("inputs/test");
-  struct file_* b = file_constructor("inputs/test_two");
+  file_t* a = file_constructor("inputs/test");
+  file_t* b = file_constructor("inputs/test_two");
 
   int qlast_index = EOF;
   paragraph* qlast;
