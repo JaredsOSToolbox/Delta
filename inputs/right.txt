@@ -3,9 +3,10 @@ notice! It should
 therefore be located at
 the beginning of this
 document!
+
 This part of the
 document has stayed the
-same from version to
+sme from version to
 version. It shouldn't
 be shown if it doesn't
 change. Otherwise, that
@@ -22,6 +23,7 @@ Nothing in the rest of
 this paragraph needs to
 be changed. Things can
 be added after it.
-This paragraph contains
+
+This pragraph contains
 important new additions
 to this document.

@@ -57,10 +57,21 @@ int main(int argc, const char* argv[]){
     print_version();
     return 0;
   }
-  paragraph_equal_assert();
+  file_t* a = file_constructor("inputs/left.txt");
+  file_t* b = file_constructor("inputs/right.txt");
+  print_revamped(a, b);
   return 0;
-  /*file_t* a = file_constructor("inputs/left.txt");*/
-  /*file_t* b = file_constructor("inputs/right.txt");*/
+
+  /*while(a_para != NULL){*/
+    /*b_last = b_para;*/
+    /*while(b_para != NULL && ((found = para_equal(*a_para, *b_para++)) == false)){*/
+      /*printf("here!\n");*/
+    /*}*/
+   /*b_para = b_last; */
+   /*paragraph_vanilla_print(*a_para++);*/
+  /*}*/
+
+
 
   /*int qlast_index = EOF;*/
   /*paragraph* qlast = NULL;*/
@@ -86,8 +97,8 @@ int main(int argc, const char* argv[]){
     /*}*/
   /*}*/
 
-  /*file_destructor(a);*/
-  /*file_destructor(b);*/
-  /*return 0;*/
+  file_destructor(a);
+  file_destructor(b);
+  return 0;
 }
 

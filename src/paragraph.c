@@ -6,14 +6,7 @@
 #include "../includes/paragraph.h"
 #include "../includes/printer.h"
 
-#define NUMBER_OF_PARAGRAPHS 100
-
-#define LESS_THAN -1
-#define GREATER_THAN 1
-#define EQUAL 0
-
 int my_max(int a, int b){ return (a > b) ? a : b; }
-
 
 paragraph* paragraph_constructor(char** content, int begin, int end){
   paragraph* para = (paragraph*)malloc(sizeof(paragraph));
@@ -60,11 +53,23 @@ void paragraph_network_add_paragraph(paragraph_network* network, paragraph* para
 
 
 bool paragraph_equal(paragraph* p, paragraph* q){
-  if(p->size != q->size){ return false; }
-  int i = p->begin, j = q->begin;
-  for(;i < p->end && j < q->end || i < j; ++i, ++j){
-    if(strcmp(p->master_content[i], q->master_content[j]) != 0){ return false; }
-  }
+  return (paragraph_cmp(p, q) == EQUAL) ? true : false;
+  /*if(p->size != q->size){ return false; }*/
+  /*int i = p->begin, j = q->begin;*/
+  /*for(;i < p->end && j < q->end || i < j; ++i, ++j){*/
+    /*if(strcmp(p->master_content[i], q->master_content[j]) != 0){ return false; }*/
+  /*}*/
+  /*return true;*/
+}
+
+
+
+bool para_equal(file_t* a, paragraph* p, file_t* b, paragraph* q) {
+  if (p == NULL || q == NULL) { return false; }
+  if (p->size != q->size) { return false; }
+  if (p->begin >= a->size || q->begin >= b->size) { return false; }
+  int i = p->begin, j = q->begin, equal = 0;
+  while ((equal = strcmp(p->master_content[i], q->master_content[i])) == 0 && i < p->end && j < q->end) { ++i; ++j; }
   return true;
 }
 
@@ -85,12 +90,21 @@ void print_paragraph_networks(paragraph_network* p, paragraph_network* q){
   paragraph** p_head = p->paragraph_nodes;
   paragraph** q_head = q->paragraph_nodes;
 
+  paragraph** qlast = q_head;
+
   while(*p_head != NULL){
-    while(*q_head != NULL && (foundmatch = paragraph_equal(*p_head, *q_head)) == false){*q_head++;}
+    qlast = q_head;
+    foundmatch = false;
+    while(*q_head != NULL && (foundmatch = para_equal(*p_head, *q_head)) == false){
+      *q_head++;
+    }
+    q_head = qlast;
     if(foundmatch){
-      while(*q_head != NULL && (foundmatch = paragraph_equal(*p_head, *q_head)) == false){
-        printf("print right!\n");
-        print_right_justified(*q_head++);
+      printf("we found a match!\n");
+      while((foundmatch = para_equal(*p_head, *q_head++)) == false){
+        printf("print right! inner foundmatch loop\n");
+        print_right_justified(*q_head);
+        qlast = q_head;
       }
       printf("print both!\n");
       format_both_on_line(*p_head++, *q_head++);
@@ -101,24 +115,37 @@ void print_paragraph_networks(paragraph_network* p, paragraph_network* q){
     }
   }
   while(*q_head != NULL){
-    printf("print right!\n");
+    printf("print right! outer q_head increment loop\n");
     print_right_justified(*q_head++);
   }
 }
 
 int paragraph_cmp(paragraph* p, paragraph* q){
+  if(p == NULL){ return LESS_THAN; }
+  else if(q == NULL){ return GREATER_THAN; }
+
   if(p->size != q->size){
-    if(p->size < q->size || p == NULL){ return LESS_THAN; }
+    if(p->size < q->size){ return LESS_THAN; }
     return GREATER_THAN;
   }
   int i = p->begin, j = q->begin;
+  int r;
 
   for(; i < p->end && j < q->end; ++i, ++j){
-    int r = strcmp(p->master_content[i], q->master_content[j]);
-    if(r >= 1){ return GREATER_THAN; }
-    else if(r <= -1){ return LESS_THAN; }
+    r = strcmp(p->master_content[i], q->master_content[j]);
+    if(r >= 1){ return LESS_THAN; }
+    else if(r <= -1){ return GREATER_THAN; }
   }
-  if(i == j){ return EQUAL; }
+  if(i == j){ 
+    if(i == p->end && j < q->end){ return LESS_THAN; }
+    else if(j == q->end && i < p->end){ return GREATER_THAN; }
+    else if(j == q->end && i > p->end){ return GREATER_THAN; }
+    else if(i == p->end && j > q->end){ return LESS_THAN; }
+    r = strcmp(p->master_content[p->end-1], q->master_content[q->end-1]);
+    if(r == EQUAL){ return EQUAL; }
+    return (r >= 1) ? GREATER_THAN : LESS_THAN;
+  }
+
   return (i < j) ? LESS_THAN : GREATER_THAN;
 }
 
@@ -147,5 +174,43 @@ void slice(file_t* a){
   while(current != NULL){
     paragraph_network_add_paragraph(a->para_network, current);
     current = para_next(a, current);
+  }
+}
+
+void print_revamped(file_t* a, file_t* b){
+  if(a == NULL || b == NULL){ return; }
+  paragraph* p = para_first(a);
+  paragraph* q = para_first(b);
+  bool found = false;
+
+  paragraph* qlast = q;
+  while (p != NULL) {
+    qlast = q;
+    found = false;
+    while (q != NULL && (found = para_equal(a, p, b, q)) == false) {
+      q = para_next(b, q);
+    }
+    q = qlast;
+
+    if (found) {
+      while ((found = para_equal(a, p, b, q)) == false) {
+        printf("print right!\n");
+        print_right_justified(p);
+        q = para_next(b, q);
+        qlast = q;
+      }
+      printf("print both!\n");
+      format_both_on_line(p, q);
+      p = para_next(a, p);
+      q = para_next(b, q);
+    } else {
+      print_left_justified(p);
+      p = para_next(a, p);
+    }
+  }
+  while (q != NULL) {
+    printf("print right!\n");
+    print_right_justified(q);
+    q = para_next(b, q);
   }
 }

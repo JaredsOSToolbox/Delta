@@ -1,12 +1,12 @@
 This part of the
 document has stayed the
-same from version to
+sme from version to
 version. It shouldn't
 be shown if it doesn't
 change. Otherwise, that
 would not be helping to
 compress the size of the
-changes. 
+changes.
 
 This paragraph contains
 text that is outdated.
