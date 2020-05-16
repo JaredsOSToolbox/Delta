@@ -22,3 +22,5 @@ clean: object_clean
 	rm $(OUTPUT)
 object_clean:
 	rm $(objects)
+debug: delta
+	gdb $(OUTPUT)

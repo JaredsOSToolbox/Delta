@@ -144,9 +144,15 @@ int main(int argc, const char * argv[]) {
 
 //  para_printfile(strings1, count1, printleft);
 //  para_printfile(strings2, count2, printright);
-  
+
+  printf("%s", strings1[0]);
   para* p = para_first(strings1, count1);
   para* q = para_first(strings2, count2);
+  while(p != NULL){
+    para_print(p, printleft);
+    p = para_next(p);
+  }
+  return 0;
   int foundmatch = 0;
 
   para* qlast = q;

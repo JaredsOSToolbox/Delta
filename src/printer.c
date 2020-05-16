@@ -3,6 +3,7 @@
 #include <string.h>
 #include "../includes/paragraph.h"
 #include "../includes/printer.h"
+#include "../includes/file_t.h"
 
 void print_left_mod(char* left){
   char buffer[BUFSIZ];
@@ -103,3 +104,50 @@ void format_both_on_line(paragraph* p, paragraph* q){
   p_format = q_format = NULL;
 }
 
+void paragraph_print(paragraph* p, file_t* a, void (*fp)(char*)) {
+  if (p == NULL) { return; }
+  for (int i = p->begin; i <= p->end && i != a->length; ++i) { fp(p->master_content[i]); }
+}
+
+void print_revamped(file_t* a, file_t* b){
+  if(a == NULL || b == NULL){ return; }
+  paragraph* p = para_first(a);
+  paragraph* q = para_first(b);
+  if(p == NULL || q == NULL){ return; }
+
+  bool found = false;
+
+  paragraph* qlast = q;
+  while (p != NULL) {
+    qlast = q;
+    found = false;
+    /*while (q != NULL && (found = para_equal(a, p, b, q)) == false) {*/
+    while (q != NULL && (found = para_equal(*a, p, *b, q)) == false) {
+      printf("in the first q loop!\n");
+      q = para_next(b, q);
+    }
+    q = qlast;
+
+    if (found) {
+      /*while ((found = para_equal(a, p, b, q)) == false) {*/
+      while ((found = para_equal(*a, p, *b, q)) == false) {
+        printf("print right!\n");
+        paragraph_print(p, a, print_right);
+        q = para_next(b, q);
+        qlast = q;
+      }
+      printf("print both!\n");
+      paragraph_print(q, b, print_both);
+      p = para_next(a, p);
+      q = para_next(b, q);
+    } else {
+      paragraph_print(p, a, print_left_mod);
+      p = para_next(a, p);
+    }
+  }
+  while (q != NULL) {
+    printf("print right outer!\n");
+    paragraph_print(q, b, print_right);
+    q = para_next(b, q);
+  }
+}

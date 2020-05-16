@@ -2,7 +2,7 @@
 typedef struct paragraph{
   int begin, end;
   char** master_content;
-  size_t size;
+  int size;
   //char* name;
 } paragraph;
 
