@@ -10,6 +10,7 @@ typedef struct paragraph_network{
   paragraph** paragraph_nodes;
   size_t size;
   size_t stack_pointer;
+  size_t master_size;
   //char* name;
 } paragraph_network;
 

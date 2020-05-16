@@ -8,8 +8,8 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "para.h"
-#include "util.h"
+#include "../includes/para.h"
+#include "../includes/util.h"
 
 #define BUFLEN 256
 

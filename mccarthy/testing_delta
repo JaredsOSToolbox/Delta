@@ -1,0 +1,21 @@
+#!/usr/bin/env zsh
+
+OUT="delta"
+
+function pass_fail(){
+  [[ $? -eq 0 ]] && echo "[+] "$1" passed!" || echo "[-] "$1" failed!"
+}
+
+function test_component(){
+  echo "[+] Testing $1"
+  ./"$OUT" "${@:2}"
+  pass_fail "$1"
+}
+
+
+[[ -f "$OUT" ]] && rm "$OUT"
+clang *.c -o "$OUT"
+
+test_component version --version
+
+test_component loading_files left.txt right.txt

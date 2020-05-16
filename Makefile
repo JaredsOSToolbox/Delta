@@ -2,7 +2,7 @@ objects = assert_tests.o delta.o file_t.o paragraph.o printer.o
 COMPILER = clang
 OUTPUT = delta
 
-all: delta run
+all: delta run clean
 
 delta: $(objects)
 	$(COMPILER) -o $(OUTPUT) $(objects)

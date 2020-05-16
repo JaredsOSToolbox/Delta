@@ -35,11 +35,9 @@ char* strip(char* input, char find, char replace){
 }
 
 void print_left(char* left) {
-  printf("Calling %s\n", __func__);
   /*char buf[BUFSIZ*100];*/
   
   /*strcpy(buf, left);*/
-
   /*int j = 0, len = (int)strlen(buf) - 1;*/
   /*for (j = 0; j <= 48 - len ; ++j) { buf[len + j] = ' '; }*/
   /*buf[len + j++] = '<';*/

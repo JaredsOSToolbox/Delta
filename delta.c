@@ -57,10 +57,10 @@ int main(int argc, const char* argv[]){
     print_version();
     return 0;
   }
-  paragraph_equal_assert();
+  file_t* a = file_constructor("inputs/left.txt");
+  file_t* b = file_constructor("inputs/right.txt");
+  print_paragraph_networks(a->para_network, b->para_network);
   return 0;
-  /*file_t* a = file_constructor("inputs/left.txt");*/
-  /*file_t* b = file_constructor("inputs/right.txt");*/
 
   /*int qlast_index = EOF;*/
   /*paragraph* qlast = NULL;*/

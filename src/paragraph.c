@@ -68,8 +68,6 @@ bool paragraph_equal(paragraph* p, paragraph* q){
   return true;
 }
 
-bool para_equal
-
 bool paragraph_network_equal(paragraph_network* p, paragraph_network* q, int* qlast_index){
   if(p->size != q->size){ return false; }
   for(int i = 0, j = 0; i < p->size && j < q->size; ++i, ++j){
@@ -92,18 +90,23 @@ void print_paragraph_networks(paragraph_network* p, paragraph_network* q){
     if(foundmatch){
       while(*q_head != NULL && (foundmatch = paragraph_equal(*p_head, *q_head)) == false){
         printf("print right!\n");
-        print_right_justified(*q_head++);
+        para_print(*q_head++, p->master_size, print_right);
+
+        /*print_right_justified(*q_head++);*/
       }
       printf("print both!\n");
-      format_both_on_line(*p_head++, *q_head++);
+      para_print(*q_head++, q->master_size, print_both);
+      /*format_both_on_line(*p_head++, *q_head++);*/
     }
     else{
       printf("print left!\n");
-      print_left_justified(*p_head++);
+      para_print(*p_head++, q->master_size, print_left);
+      /*print_left_justified(*p_head++);*/
     }
   }
   while(*q_head != NULL){
     printf("print right!\n");
+    para_print(*q_head++, q->master_size, print_right);
     print_right_justified(*q_head++);
   }
 }
@@ -150,4 +153,13 @@ void slice(file_t* a){
     paragraph_network_add_paragraph(a->para_network, current);
     current = para_next(a, current);
   }
+}
+
+bool para_equal(paragraph* p, file_t* a,  paragraph* q, file_t* b) {
+  if (p == NULL || q == NULL) { return false; }
+  if (p->size != q->size) { return false; }
+  if (p->begin >= a->length || q->begin >= b->length) { return false; }
+  int i = p->begin, j = q->begin, equal = 0;
+  while ((equal = strcmp(p->master_content[i], q->master_content[i])) == 0 && i < p->end && j < q->end) { ++i; ++j; }
+  return true;
 }

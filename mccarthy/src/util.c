@@ -8,12 +8,9 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include "util.h"
+#include "../includes/util.h"
 
 #define BUFLEN 256
-
-
-char* yesorno(int condition) { return condition == 0 ? "no" : "YES"; }
 
 FILE* openfile(const char* filename, const char* openflags) {
   FILE* f;
