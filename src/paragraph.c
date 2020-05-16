@@ -68,6 +68,8 @@ bool paragraph_equal(paragraph* p, paragraph* q){
   return true;
 }
 
+bool para_equal
+
 bool paragraph_network_equal(paragraph_network* p, paragraph_network* q, int* qlast_index){
   if(p->size != q->size){ return false; }
   for(int i = 0, j = 0; i < p->size && j < q->size; ++i, ++j){
