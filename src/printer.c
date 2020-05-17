@@ -5,45 +5,6 @@
 #include "../includes/printer.h"
 #include "../includes/file_t.h"
 
-void print_left_mod(char* left){
-  char buffer[BUFSIZ];
-  sprintf(buffer, "%-49s%s", left, "<");
-  printf("%s", buffer);
-}
-
-void print_right(char* right) {
-  if (right == NULL) { return; }
-  printf("%50s %s", ">", right);
-}
-
-void print_both(char* left_right) {
-  char buf[BUFSIZ];
-  size_t len = strlen(left_right);
-  if (len > 0) { strncpy(buf, left_right, len); }
-  buf[len - 1] = '\0';
-  printf("%-50s %s", buf, left_right);
-}
-
-
-// these implementations work for me, sorta
-
-char* strip(char* input, char find, char replace){
-  char* pos;
-  if((pos = strchr(input, find)) != NULL){ *pos = replace; } 
-  return input;
-}
-
-/*void print_left(char* left) {*/
-  /*char buf[BUFSIZ];*/
-  
-  /*strcpy(buf, left);*/
-  /*int j = 0, len = (int)strlen(buf) - 1;*/
-  /*for (j = 0; j <= 48 - len ; ++j) { buf[len + j] = ' '; }*/
-  /*buf[len + j++] = '<';*/
-  /*buf[len + j++] = '\0';*/
-  /*printf("%s\n", buf);*/
-/*}*/
-
 char* format_left_justified(paragraph* p){
   char buffer[BUFSIZ];
   char* left_justified = (char*)malloc(MAX_FORMAT_STR_SIZ * sizeof(char));
@@ -104,50 +65,20 @@ void format_both_on_line(paragraph* p, paragraph* q){
   p_format = q_format = NULL;
 }
 
-void paragraph_print(paragraph* p, file_t* a, void (*fp)(char*)) {
-  if (p == NULL) { return; }
-  for (int i = p->begin; i <= p->end && i != a->length; ++i) { fp(p->master_content[i]); }
-}
 
-void print_revamped(file_t* a, file_t* b){
-  if(a == NULL || b == NULL){ return; }
-  paragraph* p = para_first(a);
-  paragraph* q = para_first(b);
-  if(p == NULL || q == NULL){ return; }
-
-  bool found = false;
-
-  paragraph* qlast = q;
-  while (p != NULL) {
-    qlast = q;
-    found = false;
-    /*while (q != NULL && (found = para_equal(a, p, b, q)) == false) {*/
-    while (q != NULL && (found = para_equal(*a, p, *b, q)) == false) {
-      printf("in the first q loop!\n");
-      q = para_next(b, q);
+void print_both(paragraph* p, bool toggle){
+  char buffer[BUFSIZ];
+  for(int i = p->begin; i < p->end; ++i){
+    char* content = p->master_content[i];
+    size_t len = strlen(content);
+    if(len > 0){ strncpy(buffer, content, len); }
+    buffer[len-1] = '\0';
+    if(toggle){
+      printf("%-50s %s", buffer, content);
+    } else{
+      printf("%s", content);
     }
-    q = qlast;
-
-    if (found) {
-      /*while ((found = para_equal(a, p, b, q)) == false) {*/
-      while ((found = para_equal(*a, p, *b, q)) == false) {
-        printf("print right!\n");
-        paragraph_print(p, a, print_right);
-        q = para_next(b, q);
-        qlast = q;
-      }
-      printf("print both!\n");
-      paragraph_print(q, b, print_both);
-      p = para_next(a, p);
-      q = para_next(b, q);
-    } else {
-      paragraph_print(p, a, print_left_mod);
-      p = para_next(a, p);
-    }
-  }
-  while (q != NULL) {
-    printf("print right outer!\n");
-    paragraph_print(q, b, print_right);
-    q = para_next(b, q);
+    memset(buffer, 0, sizeof(buffer));
   }
 }
+

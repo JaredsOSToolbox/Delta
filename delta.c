@@ -12,6 +12,7 @@ const char* AUTHOR = "Jared Dyreson";
 const char* COAUTHOR = "William McCarthy";
 const char* INSTITUTION = "California State University Fullerton";
 
+
 void print_version(){
   printf(
     "delta (%s) 1.0\n"
@@ -29,76 +30,59 @@ void set_flags(const char* cli_arg, const char* flag, const char* long_flag, boo
   }
 }
 
-void read_all_args(int argc, const char* argv[]){
-  bool is_unknown_flag = false;
-  char buffer[20];
-  memset(buffer, 0, sizeof(buffer));
-  while(argc-- > 0 && !is_unknown_flag){
+void read_all_args(char** files, int argc, const char* argv[]){
+  int c = 0;
+  while(argc-- > 0){
     set_flags(*argv, "-v", "--version", &version); // done
     set_flags(*argv, "-q", "--brief", &brief); // done
     set_flags(*argv, "-s", "--report-identical-files", &report_identical);
-    set_flags(*argv, "", "--normal", &normal);
+    set_flags(*argv, "--normal", NULL, &normal);
     set_flags(*argv, "-y", "--side-by-side", &side_by_side);
-    set_flags(*argv, "-y", "--left-column", &left_column);
-    set_flags(*argv, "-y", "--suppress-common-lines", &suppress_common);
+    set_flags(*argv, "--left-column", NULL,  &left_column);
+    set_flags(*argv, "--suppress-common-lines", NULL, &suppress_common);
     set_flags(*argv, "-c", "--context", &context);
-    set_flags(*argv, "-u", "--unified", &unified);
-    if(!version && !brief && !report_identical && !normal && !side_by_side && !left_column && !suppress_common && !context && !unified){ is_unknown_flag = true; strcat(buffer, *argv); }
+    set_flags(*argv, "-u", "--showunified", &unified);
+    if(*argv[0] != '-'){ 
+      if(c > 2){ fprintf(stderr, "too many files, cowardly refusing!\n"); exit(1); }
+      files[c++] = *argv; 
+    }
     ++argv;
-  }
-  if(is_unknown_flag){
-    printf("got an unknown value of %s\n", buffer);
   }
 }
 
 int main(int argc, const char* argv[]){
-  /*read_all_args(--argc, ++argv);*/
+  char** fs = malloc(2 * sizeof(char*));
+  read_all_args(fs, --argc, ++argv);
+
   if(version){
     print_version();
     return 0;
   }
-  file_t* a = file_constructor("inputs/left.txt");
-  file_t* b = file_constructor("inputs/right.txt");
-  print_revamped(a, b);
-  return 0;
 
-  /*while(a_para != NULL){*/
-    /*b_last = b_para;*/
-    /*while(b_para != NULL && ((found = para_equal(*a_para, *b_para++)) == false)){*/
-      /*printf("here!\n");*/
-    /*}*/
-   /*b_para = b_last; */
-   /*paragraph_vanilla_print(*a_para++);*/
-  /*}*/
+  file_t* a = file_constructor(*fs++);
+  file_t* b = file_constructor(*fs);
 
+  bool match = paragraph_network_equal(a->para_network, b->para_network);
 
-
-  /*int qlast_index = EOF;*/
-  /*paragraph* qlast = NULL;*/
-
-  /*bool match = paragraph_network_equal(*a->para_network, *b->para_network);*/
-
-  /*if(qlast_index != EOF){ qlast = b->para_network->paragraph_nodes[qlast_index]; }*/
-  /*if(match){*/
-    /*if(brief || report_identical){*/
-      /*printf("%sFiles %s and %s are identical%s\n",*/
-              /*ANSI_COLOR_GREEN, a->file_path, b->file_path, ANSI_COLOR_RESET);*/
-      /*return 0;*/
-    /*}*/
-  /*} else{*/
-    /*if(brief){*/
-      /*printf("%sFiles %s and %s differ%s\n",*/
-              /*ANSI_COLOR_RED, a->file_path, b->file_path, ANSI_COLOR_RESET);*/
-      /*return 0;*/
-    /*}*/
-    /*else{*/
-      /*printf("%s%50s\n", a->file_path, b->file_path);*/
-      /*print_paragraph_networks(a->para_network, b->para_network);*/
-    /*}*/
-  /*}*/
+  if(match){
+    if(brief || report_identical){
+      printf("%sFiles %s and %s are identical%s\n",
+              ANSI_COLOR_GREEN, a->file_path, b->file_path, ANSI_COLOR_RESET);
+      return 0;
+    }
+  } else{
+    if(brief){
+      printf("%sFiles %s and %s differ%s\n",
+              ANSI_COLOR_RED, a->file_path, b->file_path, ANSI_COLOR_RESET);
+      return 0;
+    }
+    else{
+      printf("%s%50s\n\n\n", a->file_path, b->file_path);
+      print_paragraph_networks(a->para_network, b->para_network);
+    }
+  }
 
   file_destructor(a);
   file_destructor(b);
   return 0;
 }
-

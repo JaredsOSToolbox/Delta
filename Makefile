@@ -17,7 +17,7 @@ paragraph.o: src/paragraph.c includes/paragraph.h
 printer.o: src/printer.c includes/printer.h
 	$(COMPILER) -c -g src/printer.c
 run:
-	./$(OUTPUT)
+	./$(OUTPUT) left.txt right.txt
 clean: object_clean
 	rm $(OUTPUT)
 object_clean:

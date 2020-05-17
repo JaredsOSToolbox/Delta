@@ -22,6 +22,7 @@ file_t* file_constructor(const char* file_path){
   sprintf(f->file_path, "%s", file_path);
   f->para_network = paragraph_network_constructor();
   read_contents(f);
+  f->para_network->file_size = f->length;
   slice(f);
   return f;
 }

@@ -57,13 +57,44 @@ bool paragraph_equal(paragraph* p, paragraph* q){
   return (paragraph_cmp(p, q) == EQUAL) ? true : false;
 }
 
+void print_paragraph_networks(paragraph_network* p, paragraph_network* q){
+  bool foundmatch = false;
+
+  paragraph** p_head = p->paragraph_nodes;
+  paragraph** q_head = q->paragraph_nodes;
+
+  paragraph* qlast = *q_head;
+
+  while(*p_head != NULL){
+    /*qlast = *q_head;*/
+    foundmatch = false;
+    while(*q_head != NULL && (foundmatch = paragraph_equal(*p_head, *q_head)) == false){*q_head++;}
+    /*q_head = &qlast;*/
+    if(foundmatch){
+      while((foundmatch = paragraph_equal(*p_head, *q_head)) == false){
+        print_right_justified(*q_head++);
+        /*qlast = *q_head;*/
+      }
+      format_both_on_line(*p_head++, *q_head++);
+    }
+    else{
+      print_left_justified(*p_head++);
+    }
+  }
+  while(*q_head != NULL){
+    print_right_justified(*q_head++);
+  }
+
+  while(*p_head !=NULL){
+    print_left_justified(*p_head++);
+  }
+}
 
 
-bool para_equal(file_t* a, paragraph* p, file_t* b, paragraph* q) {
-  printf("calling %s\n", __func__);
+bool para_equal(paragraph* p, int p_file_len, paragraph* q, int q_file_len) {
   if (p == NULL || q == NULL) { return false; }
   if (p->size != q->size) { return false; }
-  if (p->begin >= a->length || q->begin >= b->length) { return false; }
+  if (p->begin >= p_file_len || q->begin >= q_file_len) { return false; }
   int i = p->begin, j = q->begin, equal = 0;
   while ((equal = strcmp(p->master_content[i], q->master_content[i])) == 0 && i < p->end && j < q->end) { ++i; ++j; }
   return true;
@@ -110,7 +141,6 @@ int paragraph_cmp(paragraph* p, paragraph* q){
 }
 
 paragraph* para_next(file_t* a, paragraph* p) {
-  printf("calling %s\n", __func__);
   if (p == NULL || p->end == a->length) { return NULL; }
   
   int i, j;
@@ -119,8 +149,6 @@ paragraph* para_next(file_t* a, paragraph* p) {
   for (i = pnew->begin; i < a->length && strcmp(p->master_content[i], "\n") != 0; ++i) { }
   pnew->end = i;
   pnew->size = abs(i-j)+1;
-  printf("size set to %d\n", pnew->size);
-  
   if (pnew->begin >= a->length) {
     free(pnew);
     pnew = NULL;
@@ -136,7 +164,7 @@ paragraph* para_first(file_t* a) {
 void slice(file_t* a){
   paragraph* current = para_first(a);
   while(current != NULL){
-    /*paragraph_network_add_paragraph(a->para_network, current);*/
+    paragraph_network_add_paragraph(a->para_network, current);
     current = para_next(a, current);
   }
 }

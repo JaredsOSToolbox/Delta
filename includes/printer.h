@@ -7,5 +7,4 @@
 
 void print_left_mod(char*);
 void print_right(char*);
-void print_both(char*);
 char* strip_pattern(char*);
